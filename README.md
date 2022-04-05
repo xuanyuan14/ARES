@@ -6,7 +6,7 @@
 <img alt="THUIR" src="https://img.shields.io/badge/THUIR-ver%201.0-blueviolet">
 </a>
 <a href="./LICENSE">
-<img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg">
+<img alt="License" src="https://img.shields.io/badge/License-Apache2.0-blue.svg">
 </a>
 <a>
 <img alt="made-with-python" src="https://img.shields.io/badge/Made%20with-Python-red.svg">
@@ -157,4 +157,4 @@ If you find our work useful, please do not save your star and cite our work:
 ## Notice
 * Please make sure that all the pre-trained model parameters have been loaded correctly, or the zero-shot or fine-tuning performance will be greatly impacted.
 * We welcome anyone who would like to contribute to this repo. 🤗
-* If you have any other questions, please feel free to contact me via [chenjia0831@gmail.com]() or open an issue.# ARES-master
+* If you have any other questions, please feel free to contact me via [chenjia0831@gmail.com]() or open an issue.
