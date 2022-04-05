@@ -11,6 +11,9 @@
 <a>
 <img alt="made-with-python" src="https://img.shields.io/badge/Made%20with-Python-red.svg">
 </a>
+<a>
+<img alt="code-size" src="https://img.shields.io/github/languages/code-size/xuanyuan14/ARES-master?color=green">
+</a>
 
 </p>
 

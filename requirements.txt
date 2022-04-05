@@ -1,12 +1,11 @@
 # PyTorch
-torch==1.2.0
+torch==1.9.0
+# Huggingface transformers
+transformers==4.9.2
 # progress bars in model download and training scripts
 tqdm
 # Accessing files from S3 directly.
 boto3
-# Used for downloading models over HTTP
-requests
-
 # nltk
 nltk
 # numpy
