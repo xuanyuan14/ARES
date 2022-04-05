@@ -26,7 +26,8 @@ This codebase contains source-code of the Python-based implementation (ARES) of 
 * torch==1.9.0
 * transformers==4.9.2
 * tqdm, nltk, numpy, boto3
-* [trec_eval](https://github.com/usnistgov/trec_eval)
+* [trec_eval](https://github.com/usnistgov/trec_eval) for evaluation on TREC DL 2019
+* [anserini](https://github.com/castorini/anserini) for generate "RANK" axiom scores
 
 ## Why this repo?
 In this repo, you can pre-train ARES<sub>simple</sub> and Transformer<sub>ICT</sub> models, and fine-tune all pre-trained models with the same architecture as BERT. The papers are listed as follows:
@@ -158,3 +159,4 @@ If you find our work useful, please do not save your star and cite our work:
 * Please make sure that all the pre-trained model parameters have been loaded correctly, or the zero-shot or fine-tuning performance will be greatly impacted.
 * We welcome anyone who would like to contribute to this repo. 🤗
 * If you have any other questions, please feel free to contact me via [chenjia0831@gmail.com]() or open an issue.
+* Code for accumulative gradient visualization and data preprocessing will come soon. Please stay tuned~ 
