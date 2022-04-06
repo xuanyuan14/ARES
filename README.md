@@ -107,6 +107,7 @@ CUDA_VISIBLE_DEVICES=0 python train.py \
 You can get:
 ```bash
 #####################
+<----- MS Dev ----->
 MRR @10: 0.2991
 MRR @100: 0.3130
 QueriesRanked: 5193
@@ -115,7 +116,6 @@ QueriesRanked: 5193
 on MS MARCO dev set and:
 ```bash
 #############################
-ARES_simple
 <--------- DL 2019 --------->
 QueriesRanked: 43
 nDCG @10: 0.5955
@@ -165,7 +165,7 @@ Zero-shot performance:
 | PROP<sub>marco</sub>   |  0.2763 |  0.2914  | 0.5317 | 0.4623 | 0.4829 | 0.6454 |  
 | ARES<sub>strict</sub>  |  0.2630 |  0.2785  | 0.4942 | 0.4504 | 0.4786 | 0.6923 |  
 | ARES<sub>hard</sub>  |  0.2627 |  0.2780  | 0.5189 | 0.4613 | 0.4943 | 0.6822 |  
-| ARES<sub>simple</sub>  |  0.2991 |  0.3130 | 0.5975 | 0.4845 | 0.4957 | 0.6916 |   
+| ARES<sub>simple</sub>  |  0.2991 |  0.3130 | 0.5955 | 0.4863 | 0.4957 | 0.6916 |   
 
 
 Few-shot performance:
