@@ -98,8 +98,8 @@ export MODEL_DIR=/path/to/ares-simple/
 
 cd finetune
 
-CUDA_VISIBLE_DEVICES=0 \
-python train.py --test \
+CUDA_VISIBLE_DEVICES=0 python train.py \
+        --test \
         --PRE_TRAINED_MODEL_NAME MODEL_DIR \
         --model_type ARES \
         --model_name ARES_simple
@@ -142,10 +142,16 @@ python -m torch.distributed.launch --nproc_per_node=4 --nnodes=1 train.py \
 ### Visualization
 ```shell
 export MODEL_DIR=/path/to/ares-simple/
+export SAVE_DIR=/path/to/output/
 
 cd visualization
 
-...
+CUDA_VISIBLE_DEVICES=0 python visual.py \
+    --PRE_TRAINED_MODEL_NAME MODEL_DIR \
+    --model_name ARES_simple \
+    --visual_q_num 1 \
+    --visual_d_num 5 \
+    --save_path SAVE_DIR
 ```
 
 ##Results

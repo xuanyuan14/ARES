@@ -166,8 +166,8 @@ if __name__ == '__main__':
 
     print("Loading model...")
     if 'BERT' in config.model_name:
-        model = ARES.from_pretrained(config.BERT_MODEL_NAME)
-        tokenizer = BertTokenizer.from_pretrained(config.BERT_MODEL_NAME)
+        model = ARES.from_pretrained(config.PRE_TRAINED_MODEL_NAME)
+        tokenizer = BertTokenizer.from_pretrained(config.PRE_TRAINED_MODEL_NAME)
     elif 'ARES' in config.model_name or 'PROP' in config.model_name:
         cfg = PretrainedConfig.get_config_dict(config.PRE_TRAINED_MODEL_NAME)[0]
         if not config.gradient_checkpointing:
