@@ -112,6 +112,17 @@ MRR @100: 0.3130
 QueriesRanked: 5193
 #####################
 ```
+on MS MARCO dev set and:
+```bash
+#############################
+ARES_simple
+<--------- DL 2019 --------->
+QueriesRanked: 43
+nDCG @10: 0.5955
+nDCG @100: 0.4863
+#############################
+```
+on DL 2019 set.
 
 ### Fine-tuning
 ```shell
@@ -126,6 +137,15 @@ python -m torch.distributed.launch --nproc_per_node=4 --nnodes=1 train.py \
         --PRE_TRAINED_MODEL_NAME MODEL_DIR \
         --gpu_num 4 --world_size 4 \
         --model_name ARES_simple
+```
+
+### Visualization
+```shell
+export MODEL_DIR=/path/to/ares-simple/
+
+cd visualization
+
+...
 ```
 
 ##Results
@@ -145,6 +165,9 @@ Zero-shot performance:
 Few-shot performance:
 ![img](imgs/few-shot-metric.png)
 
+Visualization (attribution values have been normalized within a document):
+![img](imgs/ARES_simple_ag.png)
+
 ## Citation
 If you find our work useful, please do not save your star and cite our work:
 ```
@@ -161,4 +184,4 @@ If you find our work useful, please do not save your star and cite our work:
 * Please make sure that all the pre-trained model parameters have been loaded correctly, or the zero-shot and the fine-tuning performance will be greatly impacted.
 * We welcome anyone who would like to contribute to this repo. 🤗
 * If you have any other questions, please feel free to contact me via [chenjia0831@gmail.com]() or open an issue.
-* Code for accumulative gradient visualization and data preprocessing will come soon. Please stay tuned~ 
+* Code for data preprocessing will come soon. Please stay tuned~ 

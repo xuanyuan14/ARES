@@ -19,7 +19,7 @@ from transformers import AutoModel, AutoTokenizer, AdamW, get_linear_schedule_wi
 from transformers import PretrainedConfig, BertConfig
 from torch import nn, optim
 from torch.cuda.amp import autocast, GradScaler
-from model.modeling import ARES, PROP, ICT
+from model.modeling import ARES, ICT
 
 from dataloader import get_train_qd_loader, get_test_qd_loader
 from config import get_config

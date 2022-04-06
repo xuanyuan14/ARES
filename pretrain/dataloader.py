@@ -4,6 +4,7 @@
 '''
 # encoding: utf-8
 import random
+import numpy as np
 import collections
 import pandas as pd
 from tqdm import tqdm
