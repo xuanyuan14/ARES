@@ -27,7 +27,7 @@ This codebase contains source-code of the Python-based implementation (ARES) of 
 * transformers==4.9.2
 * tqdm, nltk, numpy, boto3
 * [trec_eval](https://github.com/usnistgov/trec_eval) for evaluation on TREC DL 2019
-* [anserini](https://github.com/castorini/anserini) for generate "RANK" axiom scores
+* [anserini](https://github.com/castorini/anserini) for generating "RANK" axiom scores
 
 ## Why this repo?
 In this repo, you can pre-train ARES<sub>simple</sub> and Transformer<sub>ICT</sub> models, and fine-tune all pre-trained models with the same architecture as BERT. The papers are listed as follows:
@@ -82,7 +82,7 @@ export XGB_DIR=/path/to/xgboost.model
 
 cd pretrain
 
-CUDA_VISIBLE_DEVICES=0,1,2,3,4,5 NCCL_BLOCKING_WAIT=1 
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5 NCCL_BLOCKING_WAIT=1 \
 python  -m torch.distributed.launch --nproc_per_node=6 --nnodes=1 train.py \
         --model_type ARES \
         --PRE_TRAINED_MODEL_NAME BERT_DIR \
@@ -95,12 +95,13 @@ Here model type can be `ARES` or `ICT`.
 ### Zero-shot evaluation (based on AS top100)
 ```shell
 export MODEL_DIR=/path/to/ares-simple/
+
 cd finetune
 
-CUDA_VISIBLE_DEVICES=0 
-python train.py --test \ 
+CUDA_VISIBLE_DEVICES=0 \
+python train.py --test \
         --PRE_TRAINED_MODEL_NAME MODEL_DIR \
-        --model_type ARES \ 
+        --model_type ARES \
         --model_name ARES_simple
 ```
 You can get:
@@ -115,15 +116,16 @@ QueriesRanked: 5193
 ### Fine-tuning
 ```shell
 export MODEL_DIR=/path/to/ares-simple/
+
 cd finetune
 
-CUDA_VISIBLE_DEVICES=0,1,2,3 NCCL_BLOCKING_WAIT=1
+CUDA_VISIBLE_DEVICES=0,1,2,3 NCCL_BLOCKING_WAIT=1 \
 python -m torch.distributed.launch --nproc_per_node=4 --nnodes=1 train.py \
         --model_type ARES \
         --distributed_train \
         --PRE_TRAINED_MODEL_NAME MODEL_DIR \
         --gpu_num 4 --world_size 4 \
-        --model_name ARES
+        --model_name ARES_simple
 ```
 
 ##Results
@@ -141,7 +143,7 @@ Zero-shot performance:
 
 
 Few-shot performance:
-![img](imgs/few-shot-metric.jpg)
+![img](imgs/few-shot-metric.png)
 
 ## Citation
 If you find our work useful, please do not save your star and cite our work:
@@ -156,7 +158,7 @@ If you find our work useful, please do not save your star and cite our work:
 
 
 ## Notice
-* Please make sure that all the pre-trained model parameters have been loaded correctly, or the zero-shot or fine-tuning performance will be greatly impacted.
+* Please make sure that all the pre-trained model parameters have been loaded correctly, or the zero-shot and the fine-tuning performance will be greatly impacted.
 * We welcome anyone who would like to contribute to this repo. 🤗
 * If you have any other questions, please feel free to contact me via [chenjia0831@gmail.com]() or open an issue.
 * Code for accumulative gradient visualization and data preprocessing will come soon. Please stay tuned~ 
