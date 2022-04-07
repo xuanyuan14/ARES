@@ -23,11 +23,11 @@ def trec_to_pred(args):
     f.close()
 
 if __name__ == "__main__":
-    parser = Arguments()
+    parser = argparse.ArgumentParser()
 
-    parser.add_argument("--input_trec", default='', type=str)
-    parser.add_argument("--output", default='', type=str)
-    parser.add_argument("--qrels", default='', type=str)
-    args = parser.parse()
+    parser.add_argument("--input_trec", default='', type=str, required=True)
+    parser.add_argument("--output", default='', type=str, required=True)
+    parser.add_argument("--qrels", default='', type=str, required=True)
+    args = parser.parse_args()
 
     trec_to_pred(args)

@@ -74,13 +74,13 @@ def tokenize_pairwise(tokenizer, input_file, output_file):
 
 if __name__ == "__main__":
     
-    parser = Arguments()
+    parser = argparse.ArgumentParser()
 
     parser.add_argument("--vocab_dir", default='bert-base-uncased', type=str)
     parser.add_argument("--type", default='query', type=str)
-    parser.add_argument("--input", default='', type=str)
-    parser.add_argument("--output", default='', type=str)
-    args = parser.parse()
+    parser.add_argument("--input", default='', type=str, required=True)
+    parser.add_argument("--output", default='', type=str, required=True)
+    args = parser.parse_args()
 
 
     tokenizer = AutoTokenizer.from_pretrained(args.vocab_dir)
