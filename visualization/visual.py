@@ -22,11 +22,11 @@ from gensim.models import KeyedVectors
 warnings.filterwarnings("ignore")
 
 
-def eval_model(model,test_qd_loader,device, config):
+def eval_model(model, test_qd_loader, device, config):
     model.eval()
     qd_rank = pd.DataFrame(columns=['q_id', 'd_id', 'rank', 'score'])
     q_id_list, d_id_list, rank, score = [], [], [], []
-    top5_q_id_list, top5_d_id_list, top5_rank_list,top5_score_list = [],[],[],[]
+    top5_q_id_list, top5_d_id_list, top5_rank_list,top5_score_list = [], [], [], []
     num_instances = len(test_qd_loader)
     with torch.no_grad():
         for i, batch_data in enumerate(tqdm(test_qd_loader, desc=f"Evaluating progress", total=num_instances)):
@@ -86,10 +86,9 @@ def visual_model(lig, tokenizer, qd_loader, df_dl2019_qds,device, config):
     score_viz_list = []
     index = 0
     for i, batch_data in enumerate(tqdm(qd_loader, desc=f"IG progress", total=len(qd_loader))):
-        q_ids,d_ids,ranks,input_ids,ref_input_ids, attention_mask, token_type_ids,ref_token_type_ids = \
-            batch_data["q_id"],batch_data["d_id"],batch_data["rank"],\
-            batch_data["token_ids"],batch_data["ref_token_ids"], batch_data["attention_mask"],batch_data["token_type_ids"],batch_data["ref_token_type_ids"]
-        # print(q_ids,d_ids)
+        q_ids, d_ids, ranks, input_ids, ref_input_ids, attention_mask, token_type_ids, ref_token_type_ids = \
+            batch_data["q_id"], batch_data["d_id"], batch_data["rank"],\
+            batch_data["token_ids"], batch_data["ref_token_ids"], batch_data["attention_mask"], batch_data["token_type_ids"], batch_data["ref_token_type_ids"]
         input_ids = input_ids.to(device)  # bs x 512
         ref_input_ids = ref_input_ids.to(device)  # bs x 512
         attention_mask = attention_mask.to(device)  # bs x 512
@@ -99,10 +98,10 @@ def visual_model(lig, tokenizer, qd_loader, df_dl2019_qds,device, config):
             inputs=(input_ids, token_type_ids),
             baselines=(ref_input_ids,ref_token_type_ids),
             return_convergence_delta=True,
-            additional_forward_args=(attention_mask),
+            additional_forward_args=attention_mask,
             internal_batch_size=5
         )
-        for j,(attribution,delta) in enumerate(zip(attributions, deltas)):  # for 512*768 in bs*512*768
+        for j, attribution,delta in enumerate(zip(attributions, deltas)):  # for 512*768 in bs*512*768
             attribution_sum = attribution.sum(dim=-1).squeeze(0)  # 512
             tokens = [token.replace("Ġ", "") for token in tokenizer.convert_ids_to_tokens(input_ids[j])]
             sep_index = tokens.index('[SEP]')
@@ -111,7 +110,7 @@ def visual_model(lig, tokenizer, qd_loader, df_dl2019_qds,device, config):
             tokens = query_tokens+doc_tokens
             query_attribution_sum = attribution_sum[:sep_index] / torch.norm(attribution_sum)
             doc_attribution_sum = attribution_sum[sep_index:sep_index+250] / torch.norm(attribution_sum[sep_index:sep_index+250])
-            attribution_sum = torch.cat((query_attribution_sum,doc_attribution_sum),axis=-1)
+            attribution_sum = torch.cat((query_attribution_sum,doc_attribution_sum), axis=-1)
             v_q_id,v_d_id,rank = q_ids[j],d_ids[j],ranks[j]
             try:
                 level = df_dl2019_qds.set_index(0).loc[int(v_q_id)].set_index(2).loc[str(v_d_id)][3]

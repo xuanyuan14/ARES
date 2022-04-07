@@ -23,6 +23,7 @@ def tokenize_file(tokenizer, input_file, output_file, file_type):
             ))
             outFile.write("\n")
 
+
 def tokenize_queries(tokenizer, input_file, output_file):
     total_size = sum(1 for _ in open(input_file))
     f = open(output_file, 'w')
@@ -37,6 +38,7 @@ def tokenize_queries(tokenizer, input_file, output_file):
             }) + '\n')
     f.close()
 
+
 def tokenize_docs(tokenizer, input_file, output_file):
     total_size = sum(1 for _ in open(input_file))
     f = open(output_file, 'w')
@@ -50,6 +52,7 @@ def tokenize_docs(tokenizer, input_file, output_file):
                 'contents': ids
             }) + '\n')
     f.close()
+
 
 def tokenize_pairwise(tokenizer, input_file, output_file):
     total_size = sum(1 for _ in open(input_file))
@@ -72,16 +75,16 @@ def tokenize_pairwise(tokenizer, input_file, output_file):
             }) + '\n')
     f.close()
 
+
 if __name__ == "__main__":
-    
-    parser = Arguments()
+
+    parser = argparse.ArgumentParser()
 
     parser.add_argument("--vocab_dir", default='bert-base-uncased', type=str)
     parser.add_argument("--type", default='query', type=str)
-    parser.add_argument("--input", default='', type=str)
-    parser.add_argument("--output", default='', type=str)
-    args = parser.parse()
-
+    parser.add_argument("--input", default='', type=str, required=True)
+    parser.add_argument("--output", default='', type=str, required=True)
+    args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(args.vocab_dir)
 
@@ -91,7 +94,3 @@ if __name__ == "__main__":
         tokenize_docs(tokenizer, args.input, args.output)
     elif args.type == "triples":
         tokenize_pairwise(tokenizer, args.input, args.output)
-
-
-
-    
