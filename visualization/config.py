@@ -97,7 +97,6 @@ def get_config(parse=True, **optional_kwargs):
                         help='Random seed')
     parser.add_argument('--PRE_TRAINED_MODEL_NAME', default='/path/to/ARES-simple/',
                         help='huggingface model name')
-    parser.add_argument('--load_ckpt', action="store_true", help='whether to load a trained checkpoint')
     parser.add_argument('--model_path', default='model_state_ARES', help='name of checkpoint to load')
     parser.add_argument('--print_every', default=200)
     parser.add_argument('--local_rank', type=int, default=0, help='node rank for distributed training')
