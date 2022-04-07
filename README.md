@@ -159,7 +159,7 @@ CUDA_VISIBLE_DEVICES=0 python visual.py \
     --model_path CKPT_NAME
 ```
 
-##Results  
+## Results  
 Zero-shot performance:
 
 | Model Name |   MS MARCO MRR@10 |  MS MARCO MRR@100  | DL NDCG@10 |  DL NDCG@100 |  COVID  |  EQ |  
