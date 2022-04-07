@@ -95,6 +95,7 @@ Here model type can be `ARES` or `ICT`.
 ### Zero-shot evaluation (based on AS top100)
 ```shell
 export MODEL_DIR=/path/to/ares-simple/
+export CKPT_NAME=ares.ckpt
 
 cd finetune
 
@@ -102,7 +103,9 @@ CUDA_VISIBLE_DEVICES=0 python train.py \
         --test \
         --PRE_TRAINED_MODEL_NAME MODEL_DIR \
         --model_type ARES \
-        --model_name ARES_simple
+        --model_name ARES_simple \
+        --load_ckpt \
+        --model_path CKPT_NAME
 ```
 You can get:
 ```bash
@@ -143,6 +146,7 @@ python -m torch.distributed.launch --nproc_per_node=4 --nnodes=1 train.py \
 ```shell
 export MODEL_DIR=/path/to/ares-simple/
 export SAVE_DIR=/path/to/output/
+export CKPT_NAME=ares.ckpt
 
 cd visualization
 
@@ -151,7 +155,8 @@ CUDA_VISIBLE_DEVICES=0 python visual.py \
     --model_name ARES_simple \
     --visual_q_num 1 \
     --visual_d_num 5 \
-    --save_path SAVE_DIR
+    --save_path SAVE_DIR \
+    --model_path CKPT_NAME
 ```
 
 ##Results
