@@ -72,6 +72,33 @@ Pseudo queries and axiomatic features:
 
 
 ## Quick Start
+
+### Example Usage
+```python
+from model.modeling import ARESReranker
+
+model = ARESReranker.from_pretrained(model_path).to(device)
+
+query1 = "What is the best way to get to the airport"
+query2 = "what do you like to eat?"
+
+doc1 = "The best way to get to the airport is to take the bus"
+doc2 = "I like to eat apples"
+
+qd_pairs = [
+        (query1, doc1), (query1, doc2),
+        (query2, doc1), (query2, doc2)
+]
+
+score = model.score(qd_pairs)
+```
+
+You will get
+```bash
+scores: [ 41.60 -33.66 
+          -38.00 30.03 ]
+```
+
 Note that to accelerate the training process, we adopt the parallel training technique. The scripts for pre-training and fine-tuning are as follow: 
 
 ### Pre-training

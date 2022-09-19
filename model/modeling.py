@@ -8,10 +8,13 @@ import numpy as np
 import math
 import torch
 import torch.nn as nn
+from torch import Tensor
 from torch.nn import CrossEntropyLoss, MarginRankingLoss
 from torch.nn import Softmax
 from torch.cuda.amp import autocast
 from transformers import BertModel, BertPreTrainedModel
+from transformers import AutoTokenizer, AutoConfig, AutoModel
+
 
 
 sys.path.insert(0, '../')
@@ -23,6 +26,15 @@ PRETRAINED_MODEL_ARCHIVE_MAP = {
     'spanbert-base-cased': "https://dl.fbaipublicfiles.com/fairseq/models/spanbert_hf_base.tar.gz",
     'spanbert-large-cased': "https://dl.fbaipublicfiles.com/fairseq/models/spanbert_hf.tar.gz"
 }
+
+def batch_to_device(batch, target_device):
+    """
+    send a pytorch batch to a device (CPU/GPU)
+    """
+    for key in batch:
+        if isinstance(batch[key], Tensor):
+            batch[key] = batch[key].to(target_device)
+    return batch
 
 
 class BertLayerNorm(nn.Module):
@@ -186,3 +198,81 @@ class ARES(BertPreTrainedModel):
             return loss
         else:
             return prediction_scores
+
+
+class ARESReranker(ARES):
+    def __init__(self, config, max_input_length=512):
+        super().__init__(config)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            "bert-base-uncased", config=config, local_files_only=True)
+        self.max_input_length = max_input_length
+
+    def tokenize(self, qd_pairs):
+        feature_input_ids = []
+        feature_token_type_ids = []
+        feature_attention_mask = []
+        for query, doc in qd_pairs:
+            cls_id, sep_id = 101, 102
+            query_max_len = 32
+            doc_max_len = 512 - 3 - query_max_len
+            tokens = self.tokenizer.tokenize(query)
+            query_input_ids = self.tokenizer.convert_tokens_to_ids(tokens)[: query_max_len]
+            
+            tokens = self.tokenizer.tokenize(doc)
+            doc_input_ids = self.tokenizer.convert_tokens_to_ids(tokens)[: doc_max_len]
+
+            input_ids = [cls_id] + query_input_ids + [sep_id] + doc_input_ids + [sep_id]
+            token_type_ids = [0] * (len(query_input_ids) + 2) + [1] * (len(doc_input_ids) + 1)
+            attention_mask = np.int64(np.array(input_ids) > 0)
+
+            feature_input_ids.append(torch.tensor(input_ids))
+            feature_token_type_ids.append(torch.tensor(token_type_ids))
+            feature_attention_mask.append(torch.tensor(attention_mask))
+
+        
+        # padding to same length
+        max_len = max([len(x) for x in feature_input_ids])
+        for i in range(len(feature_input_ids)):
+            pad_len = max_len - len(feature_input_ids[i])
+            feature_input_ids[i] = torch.cat([feature_input_ids[i], torch.zeros(pad_len).long()])
+            feature_token_type_ids[i] = torch.cat([feature_token_type_ids[i], torch.zeros(pad_len).long()])
+            feature_attention_mask[i] = torch.cat([feature_attention_mask[i], torch.zeros(pad_len).long()])
+        
+        feature_input_ids = torch.vstack(feature_input_ids)
+        feature_token_type_ids = torch.vstack(feature_token_type_ids)
+        feature_attention_mask = torch.vstack(feature_attention_mask)
+
+        return {
+            "input_ids": feature_input_ids,
+            "token_type_ids": feature_token_type_ids,
+            "input_mask": feature_attention_mask
+        }
+
+    def score(self, qd_pairs):
+        features = self.tokenize(qd_pairs)
+        batch_to_device(features, self.device)
+        with torch.cuda.amp.autocast():
+            with torch.no_grad():
+                scores = self.forward(config=None, **features)
+                scores = scores.cpu().numpy().reshape(-1)
+        return scores
+
+    
+    def rerank_query(self, query, docs):
+        batch_size = 100
+
+        qd_pairs = [(query, doc) for doc in docs]
+        scores = []
+        for i in range(0, len(qd_pairs), batch_size):
+            scores.append(self.score(qd_pairs[i: i + batch_size]))
+        
+        scores = np.concatenate(scores, axis=0)
+        scores = scores.reshape(-1)
+        return scores.tolist()
+
+    def rerank(self, queries, docs_topk):
+        assert len(queries) == len(docs_topk)
+        scores_for_queries = []
+        for query, docs in zip(queries, docs_topk):
+            scores_for_queries.append(self.rerank_query(query, docs))
+        return scores_for_queries
