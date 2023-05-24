@@ -116,7 +116,7 @@ def get_train_qd_loader(df_qds, train_top100, q_dict, d_dict, did2idx, config, m
     new_q_ids, new_d_ids, labels = [], [], []
 
     q_num = len(q_ids)
-    for idx in tqdm(range(q_num), desc=f"Loading train q-d progress"):  # top 20 hard candidate？需要改回来嘛？
+    for idx in tqdm(range(q_num), desc=f"Loading train q-d progress"):
         this_qid = q_ids[idx]
         neg_cands = set(top100_dict[this_qid]) - set(qd_dict[this_qid])
         neg_cands = list(neg_cands)
